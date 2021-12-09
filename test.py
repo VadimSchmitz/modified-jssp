@@ -47,18 +47,20 @@ for j in range(n):
 
 model.optimize()
 #outputting data
-quay_count = 0
+machine_count = 0
 for i in machines:
-    quay_count = quay_count + 1
+    machine_count = machine_count + 1
 
 task_count = 0
 for i in times:
     task_count = task_count + 1
 
+holder = [[]] * machine_count
 machine_one = [] 
 machine_two = []
 machine_three = []
 
+holder[0]
 
 print("Completion time: ", c.x)
 
@@ -68,20 +70,24 @@ for (j, i) in product(range(n), range(m)):
     converted_time = x[j][i].x
     task_number = j+1
     if i+1 is 1:
+    if i is 1:
         machine_one.append([task_number, converted_time])
     elif i+1 is 2:
+    elif i is 2:
         machine_two.append([task_number, converted_time])
     elif i+1 is 3:
+    elif i is 3:
         machine_three.append([task_number, converted_time])
 
     print("task %d starts on machine %d at time %g  " % (j+1, i+1, x[j][i].x))
 
     row += 1
 
-complete_sorted = []
 machine_one_sorted_by_second = sorted(machine_one, key=lambda tup: tup[1])
 machine_two_sorted_by_second = sorted(machine_two, key=lambda tup: tup[1])
 machine_three_sorted_by_second = sorted(machine_three, key=lambda tup: tup[1])
+
+complete_sorted= []
 
 complete_sorted.extend((machine_one_sorted_by_second,machine_two_sorted_by_second,machine_three_sorted_by_second))
 print(machine_one_sorted_by_second)
@@ -90,10 +96,12 @@ print(machine_three_sorted_by_second)
 
 col = 1
 row = 1
+
+#TODO dynamically change to correct date
 worksheet.write(row,col-1,"monday")
 
 count = 1
-for _ in range(quay_count):
+for _ in range(machine_count):
     worksheet.write(row,col,"location "+str(count))
     col = col+1
     count = count+1
@@ -106,13 +114,14 @@ start_time = datetime(2020,12,7,0,0,0,0)
 
 timespan = int(c.x)
 for _ in range(timespan * 2 + 1):
-    worksheet.write(row+1,col-quay_count-1,start_time.strftime('%H:%M'))
+    worksheet.write(row+1,col-machine_count-1,start_time.strftime('%H:%M'))
     row = row + 1
     start_time = start_time + timedelta(minutes=30)
 
 #populating table
 #to go down add 1
 #initial start
+print(complete_sorted[0])
 col = 2 + int(complete_sorted[0][0][1]*2)
 #to go to right add
 row = 1
