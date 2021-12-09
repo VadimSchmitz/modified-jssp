@@ -55,32 +55,35 @@ task_count = 0
 for i in times:
     task_count = task_count + 1
 
-holder = [[]] * machine_count
+holder = []
+for i in range(machine_count):
+  holder.append([])
+
+holder[0].append(1)
+
 machine_one = [] 
 machine_two = []
 machine_three = []
 
-holder[0]
 
+print(holder)
 print("Completion time: ", c.x)
 
+count = 0
 for (j, i) in product(range(n), range(m)):
     #j+1 = task 
     #i+1 = machine
+    print(i+1)
     converted_time = x[j][i].x
     task_number = j+1
-    if i+1 is 1:
-    if i is 1:
-        machine_one.append([task_number, converted_time])
-    elif i+1 is 2:
-    elif i is 2:
-        machine_two.append([task_number, converted_time])
-    elif i+1 is 3:
-    elif i is 3:
-        machine_three.append([task_number, converted_time])
+    
+    # if i  == count:
+    print(task_number, converted_time)
+    holder.append([task_number, converted_time])
 
+    count = count + 1
     print("task %d starts on machine %d at time %g  " % (j+1, i+1, x[j][i].x))
-
+    i = i + 1
     row += 1
 
 machine_one_sorted_by_second = sorted(machine_one, key=lambda tup: tup[1])
