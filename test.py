@@ -55,11 +55,12 @@ task_count = 0
 for i in times:
     task_count = task_count + 1
 
+
 holder = []
+
 for i in range(machine_count):
   holder.append([])
 
-holder[0].append(1)
 
 machine_one = [] 
 machine_two = []
@@ -67,35 +68,41 @@ machine_three = []
 
 
 print(holder)
-print("Completion time: ", c.x)
+# print("Completion time: ", c.x)
+
 
 count = 0
 for (j, i) in product(range(n), range(m)):
     #j+1 = task 
     #i+1 = machine
-    print(i+1)
     converted_time = x[j][i].x
     task_number = j+1
-    
+
     # if i  == count:
-    print(task_number, converted_time)
-    holder.append([task_number, converted_time])
+    # print(task_number, converted_time)
+    holder[i].append([task_number,converted_time])
+
 
     count = count + 1
     print("task %d starts on machine %d at time %g  " % (j+1, i+1, x[j][i].x))
     i = i + 1
     row += 1
 
+print(holder)
+
+
+#sort
+
 machine_one_sorted_by_second = sorted(machine_one, key=lambda tup: tup[1])
 machine_two_sorted_by_second = sorted(machine_two, key=lambda tup: tup[1])
 machine_three_sorted_by_second = sorted(machine_three, key=lambda tup: tup[1])
 
-complete_sorted= []
+sorted_holder = []
+for i in range(machine_count):
+    sorted_holder.append(sorted(holder[i], key=lambda tup: tup[1]))
 
-complete_sorted.extend((machine_one_sorted_by_second,machine_two_sorted_by_second,machine_three_sorted_by_second))
-print(machine_one_sorted_by_second)
-print(machine_two_sorted_by_second)
-print(machine_three_sorted_by_second)
+print(sorted_holder)
+
 
 col = 1
 row = 1
@@ -124,14 +131,14 @@ for _ in range(timespan * 2 + 1):
 #populating table
 #to go down add 1
 #initial start
-print(complete_sorted[0])
-col = 2 + int(complete_sorted[0][0][1]*2)
+print(sorted_holder[0])
+col = 2 + int(sorted_holder[0][0][1]*2)
 #to go to right add
 row = 1
 x = 1    
 worksheet.write(col,row,"1")
 
-for machine in complete_sorted:
+for machine in sorted_holder:
 
     for i in range(len(machine)): 
         try:
