@@ -12,7 +12,7 @@ col = 2
 
 n = m = 3
 
-times = [[2, 1, 2],
+times = [[1,5, 2, 3],
          [1, 2, 2],
          [1, 2, 1]]
 
@@ -36,14 +36,14 @@ for (j, i) in product(range(n), range(1, m)):
     model += x[j][machines[j][i]] - x[j][machines[j][i-1]] >= \
         times[j][machines[j][i-1]]
 
-for (j, k) in product(range(n), range(n)):
-    if k != j:
-        for i in range(m):
-            model += x[j][i] - x[k][i] + M*y[j][k][i] >= times[k][i]
-            model += -x[j][i] + x[k][i] - M*y[j][k][i] >= times[j][i] - M
+# for (j, k) in product(range(n), range(n)):
+#     if k != j:
+#         for i in range(m):
+#             model += x[j][i] - x[k][i] + M*y[j][k][i] >= times[k][i]
+#             model += -x[j][i] + x[k][i] - M*y[j][k][i] >= times[j][i] - M
 
-for j in range(n):
-    model += c - x[j][machines[j][m - 1]] >= times[j][machines[j][m - 1]]
+# for j in range(n):
+#     model += c - x[j][machines[j][m - 1]] >= times[j][machines[j][m - 1]]
 
 model.optimize()
 #outputting data
@@ -61,15 +61,7 @@ holder = []
 for i in range(machine_count):
   holder.append([])
 
-
-machine_one = [] 
-machine_two = []
-machine_three = []
-
-
-print(holder)
-# print("Completion time: ", c.x)
-
+print("Completion time: ", c.x)
 
 count = 0
 for (j, i) in product(range(n), range(m)):
@@ -88,21 +80,10 @@ for (j, i) in product(range(n), range(m)):
     i = i + 1
     row += 1
 
-print(holder)
-
-
 #sort
-
-machine_one_sorted_by_second = sorted(machine_one, key=lambda tup: tup[1])
-machine_two_sorted_by_second = sorted(machine_two, key=lambda tup: tup[1])
-machine_three_sorted_by_second = sorted(machine_three, key=lambda tup: tup[1])
-
 sorted_holder = []
 for i in range(machine_count):
     sorted_holder.append(sorted(holder[i], key=lambda tup: tup[1]))
-
-print(sorted_holder)
-
 
 col = 1
 row = 1
@@ -131,12 +112,13 @@ for _ in range(timespan * 2 + 1):
 #populating table
 #to go down add 1
 #initial start
-print(sorted_holder[0])
 col = 2 + int(sorted_holder[0][0][1]*2)
 #to go to right add
 row = 1
 x = 1    
 worksheet.write(col,row,"1")
+
+print(sorted_holder)
 
 for machine in sorted_holder:
 
@@ -152,7 +134,6 @@ for machine in sorted_holder:
         #invert number
         if diff < 0:
             diff = diff * -1
-        print(first, second , diff)
         worksheet.write(col,row, f'vessel: {machine[i][0]} \n stop: {i+1}')
         col = col+ (diff * 2)
     #re initialize col and row
