@@ -63,11 +63,11 @@ def main():
             model.Add(all_tasks[job_id, task_id].start >= arrival_time[x])
         x = x + 1
 
-    # # Precedences inside a job.
-    # for job_id, job in enumerate(jobs_data):
-    #     for task_id in range(len(job) - 1):
-    #         model.Add(all_tasks[job_id, task_id +
-    #                             1].start >= all_tasks[job_id, task_id].end)
+    # Precedences inside a job.
+    for job_id, job in enumerate(jobs_data):
+        for task_id in range(len(job) - 1):
+            model.Add(all_tasks[job_id, task_id +
+                                1].start >= all_tasks[job_id, task_id].end)
 
     # Makespan objective.
     obj_var = model.NewIntVar(0, horizon, 'makespan')
@@ -129,26 +129,30 @@ def main():
 
         # Finally print the solution found.
         print(f'Optimal Schedule Length: {solver.ObjectiveValue()}')
-        print(output)
-
         #plotting
+        last = 0
         x = holder
         fig, ax = plt.subplots()
-        print(enumerate(holder)) 
         for i,evt in enumerate(holder): 
-            for p,task in enumerate(evt):        
-                print(task)
-                ax.barh(i,width=evt[p][1]-evt[p][0],left=evt[p][0], color="lightgrey", edgecolor="black", label="test")
-                ax.text(evt[p][0] + 0.1 , i, str("Job %s \n Task %s" % (evt[p][2] + 1, evt[p][3] + 1) ), color='black', fontweight='bold')
-        
-        
+            for p,task in enumerate(evt):   
+                
+                ax.barh(i,width=evt[p][1]-evt[p][0] ,left=evt[p][0], color="lightgray", edgecolor="black", label="test")
+                ax.text(evt[p][0] + 0.1 , i, str("Job %s\nTask %s\n Time %s" % (evt[p][2] + 1, evt[p][3] + 1, str(evt[p][1]-evt[p][0]))), color='black', fontweight='bold')
+               
+                #logic for lenght of x axis
+                if (evt[p][1]> last):
+                    last = evt[p][1] + 5
+
+        #y axis amount of quays
         ax.set_yticks(range(len(x)))
         ax.set_yticklabels([f'Quay {i+1}' for i in range(len(holder))])
-        
+
+        plt.xticks(np.arange(0,last,1))
+
+
         ax.invert_yaxis()
         
         plt.show()
-        print(holder)
     else:
         print('No solution found.')
 
