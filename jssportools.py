@@ -2,6 +2,7 @@
 import collections
 from ortools.sat.python import cp_model
 import matplotlib.pyplot as plt
+import numpy as np
 
 def main():
     """Minimal jobshop problem."""
@@ -138,21 +139,25 @@ def main():
                 
                 ax.barh(i,width=evt[p][1]-evt[p][0] ,left=evt[p][0], color="lightgray", edgecolor="black", label="test")
                 ax.text(evt[p][0] + 0.1 , i, str("Job %s\nTask %s\n Time %s" % (evt[p][2] + 1, evt[p][3] + 1, str(evt[p][1]-evt[p][0]))), color='black', fontweight='bold')
-               
+
+                #time spent doing operations
+                print("time spent doing stuff", evt[p][1]-evt[p][0])
+                print("arrival time", arrival_time[i])
+
+
                 #logic for lenght of x axis
                 if (evt[p][1]> last):
                     last = evt[p][1] + 5
 
         #y axis amount of quays
         ax.set_yticks(range(len(x)))
-        ax.set_yticklabels([f'Quay {i+1}' for i in range(len(holder))])
-
         plt.xticks(np.arange(0,last,1))
-
-
+        ax.set_yticklabels([f'Quay {i+1}' for i in range(len(holder))])
         ax.invert_yaxis()
-        
         plt.show()
+
+
+        #benchmarks
     else:
         print('No solution found.')
 
